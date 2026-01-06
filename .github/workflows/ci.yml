@@ -1,0 +1,39 @@
+name: CI Symfony
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, intl, pdo_mysql
+          tools: composer
+          coverage: none
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      - name: Cache clear
+        run: php bin/console cache:clear
+
+      - name: Run tests (if exist)
+        run: |
+          if [ -f bin/phpunit ]; then
+            php bin/phpunit
+          else
+            echo "No tests found"
+          fi
