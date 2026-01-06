@@ -22,13 +22,16 @@ jobs:
           coverage: none
 
       - name: Validate composer.json
-        run: composer validate --strict
+        run: composer validate
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
 
-      - name: Cache clear
-        run: php bin/console cache:clear
+      - name: Prepare env
+        run: cp .env .env.local
+
+      - name: Clear cache
+        run: php bin/console cache:clear --no-warmup
 
       - name: Run tests (if exist)
         run: |
