@@ -22,3 +22,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    # Service d'upload de fichiers
+    App\Service\FileUploadService:
+        arguments:
+            $uploadDir: '%kernel.project_dir%/public/uploads'
